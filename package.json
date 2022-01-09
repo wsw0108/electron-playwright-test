@@ -1,0 +1,22 @@
+{
+  "name": "electron-playwright-test",
+  "version": "0.1.0",
+  "description": "",
+  "main": "app/main/index.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "playwright test"
+  },
+  "keywords": [
+    "electron",
+    "playwright",
+    "test"
+  ],
+  "author": "wsw0108",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.17.1",
+    "electron": "^16.0.6",
+    "playwright": "^1.17.1"
+  }
+}
