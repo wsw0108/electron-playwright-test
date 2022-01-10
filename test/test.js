@@ -29,7 +29,19 @@ test.afterAll(async () => {
   await electronApp.close()
 })
 
-test('menu open file', async () => {
+test('html input open file', async () => {
+  const page = await electronApp.firstWindow()
+  // console.log(await page.title())
+  page.on('filechooser', async (fileChooser) => {
+    await fileChooser.setFiles(join(__dirname, 'data.txt'))
+  })
+  await page.click('#file')
+  const textarea = await page.$('#content')
+  expect(textarea).toBeTruthy()
+  expect(await textarea.innerHTML()).toBe('data.txt')
+})
+
+test('native menu open file', async () => {
   const page = await electronApp.firstWindow()
   // console.log(await page.title())
   // FIXME: https://github.com/microsoft/playwright/issues/5013
