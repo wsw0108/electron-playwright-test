@@ -12,7 +12,7 @@ function initMenu() {
       const result = await dialog.showOpenDialog(win, {
         filters: [{ name: 'Text', extensions: ['txt'] }]
       })
-      if (!result.canceled) {
+      if (result.filePaths.length) {
         const text = await fs.readFile(result.filePaths[0], 'utf8')
         win.webContents.send('open-file', text)
       }
@@ -26,11 +26,15 @@ function initMenu() {
 }
 
 function createWindow() {
+  const testing = process.env.CI === '1'
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
+      contextIsolation: !testing,
+      nodeIntegration: testing,
       preload: path.join(__dirname, '../renderer/preload.js')
     }
   })
