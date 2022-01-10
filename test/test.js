@@ -22,7 +22,7 @@ function ipcRendererSendSync(page, message, ...args) {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { ipcRenderer } = require('electron')
       const result = ipcRenderer.sendSync(message, ...args)
-      console.log('result:', result)
+      console.log('[ipcRenderer] sendSync:', result)
       return result
     },
     { message, args }
@@ -30,15 +30,20 @@ function ipcRendererSendSync(page, message, ...args) {
 }
 
 async function mockDialog(page, options) {
-  await ipcRendererSendSync(page, 'SPECTRON_FAKE_DIALOG/SEND', options)
+  return await ipcRendererSendSync(page, 'SPECTRON_FAKE_DIALOG/SEND', options)
 }
 
 let electronApp;
 
 test.beforeAll(async () => {
   process.env.CI = '1'
+  const args = [join(__dirname, '..')]
+  args.unshift(join(__dirname, 'preload.js'))
+  args.unshift('--require')
+  args.unshift(`--log-file=${join(__dirname, '../electron.log')}`)
+  args.unshift('--enable-logging=file')
   electronApp = await electron.launch({
-    args: ['--require', join(__dirname, 'preload.js'), join(__dirname, '..')],
+    args: args,
     executablePath: electronPath,
   })
 })
@@ -47,7 +52,7 @@ test.afterAll(async () => {
   await electronApp.close()
 })
 
-test.skip('html input open file', async () => {
+test('html input open file', async () => {
   const page = await electronApp.firstWindow()
   // console.log(await page.title())
   page.on('filechooser', async (fileChooser) => {
@@ -66,7 +71,7 @@ test('native menu open file', async () => {
   // page.on('filechooser', async (fileChooser) => {
   //   await fileChooser.setFiles(join(__dirname, 'data.txt'))
   // })
-  await mockDialog(page, [
+  const mocked = await mockDialog(page, [
     {
       method: 'showOpenDialog',
       value: {
@@ -74,6 +79,7 @@ test('native menu open file', async () => {
       }
     }
   ])
+  console.log('mocked:', mocked)
   await clickMenuItemById(electronApp, 'file-open')
   const textarea = await page.$('#content')
   expect(textarea).toBeTruthy()

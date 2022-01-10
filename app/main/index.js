@@ -9,9 +9,11 @@ function initMenu() {
     label: 'Open',
     id: 'file-open',
     click: async (_, win) => {
+      console.log('before showOpenDialog')
       const result = await dialog.showOpenDialog(win, {
         filters: [{ name: 'Text', extensions: ['txt'] }]
       })
+      console.log('after showOpenDialog', result)
       if (result.filePaths.length) {
         const text = await fs.readFile(result.filePaths[0], 'utf8')
         win.webContents.send('open-file', text)

@@ -34,6 +34,8 @@ function fake(options) {
 }
 
 ipcMain.on('SPECTRON_FAKE_DIALOG/SEND', (e, options) => {
+  // FIXME: returnValue returned, but log does not write to log file.
+  console.log('[ipcMain] fake options:', options)
   fake(options);
   e.returnValue = true;
 });
