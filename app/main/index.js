@@ -9,14 +9,19 @@ function initMenu() {
     label: 'Open',
     id: 'file-open',
     click: async (_, win) => {
-      console.log('before showOpenDialog')
+      // console.log('before showOpenDialog')
+      if (!win) {
+        win = BrowserWindow.getFocusedWindow();
+      }
       const result = await dialog.showOpenDialog(win, {
         filters: [{ name: 'Text', extensions: ['txt'] }]
       })
-      console.log('after showOpenDialog', result)
+      // console.log('after showOpenDialog', result)
       if (result.filePaths.length) {
         const text = await fs.readFile(result.filePaths[0], 'utf8')
-        win.webContents.send('open-file', text)
+        if (win) {
+          win.webContents.send('open-file', text)
+        }
       }
     }
   })
@@ -37,6 +42,7 @@ function createWindow() {
     webPreferences: {
       contextIsolation: !testing,
       nodeIntegration: testing,
+      additionalArguments: [`--app-dir=${path.join(__dirname, '../..')}`],
       preload: path.join(__dirname, '../renderer/preload.js')
     }
   })

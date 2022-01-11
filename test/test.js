@@ -22,7 +22,7 @@ function ipcRendererSendSync(page, message, ...args) {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { ipcRenderer } = require('electron')
       const result = ipcRenderer.sendSync(message, ...args)
-      console.log('[ipcRenderer] sendSync:', result)
+      // console.log('[ipcRenderer] sendSync:', result)
       return result
     },
     { message, args }
@@ -79,9 +79,12 @@ test('native menu open file', async () => {
       }
     }
   ])
-  console.log('mocked:', mocked)
+  // console.log('mocked:', mocked)
   await clickMenuItemById(electronApp, 'file-open')
   const textarea = await page.$('#content')
   expect(textarea).toBeTruthy()
-  expect(await textarea.innerHTML()).toBe('data')
+  // expect(await textarea.innerHTML()).toBe('data')
+  setTimeout(async () => {
+    expect(await textarea.innerHTML()).toBe('data')
+  }, 500)
 })
