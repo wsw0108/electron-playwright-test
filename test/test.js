@@ -2,6 +2,7 @@ const { _electron: electron } = require('playwright')
 const { test, expect } = require('@playwright/test')
 const electronPath = require('electron')
 const { join } = require('path')
+const { launch, mock } = require('playwright-fake-dialog')
 
 // From https://github.com/spaceagetv/electron-playwright-example/blob/master/e2e-tests/electron-playwright-helpers.ts
 function clickMenuItemById(electronApp, id) {
@@ -16,33 +17,14 @@ function clickMenuItemById(electronApp, id) {
   }, id)
 }
 
-function ipcRendererSendSync(page, message, ...args) {
-  return page.evaluate(
-    ({ message, args }) => {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { ipcRenderer } = require('electron')
-      const result = ipcRenderer.sendSync(message, ...args)
-      // console.log('[ipcRenderer] sendSync:', result)
-      return result
-    },
-    { message, args }
-  )
-}
-
-async function mockDialog(page, options) {
-  return await ipcRendererSendSync(page, 'SPECTRON_FAKE_DIALOG/SEND', options)
-}
-
 let electronApp;
 
 test.beforeAll(async () => {
   process.env.CI = '1'
   const args = [join(__dirname, '..')]
-  args.unshift(join(__dirname, 'preload.js'))
-  args.unshift('--require')
   args.unshift(`--log-file=${join(__dirname, '../electron.log')}`)
   args.unshift('--enable-logging=file')
-  electronApp = await electron.launch({
+  electronApp = await launch(electron, {
     args: args,
     executablePath: electronPath,
   })
@@ -71,7 +53,7 @@ test('native menu open file', async () => {
   // page.on('filechooser', async (fileChooser) => {
   //   await fileChooser.setFiles(join(__dirname, 'data.txt'))
   // })
-  const mocked = await mockDialog(page, [
+  const mocked = await mock(page, [
     {
       method: 'showOpenDialog',
       value: {
