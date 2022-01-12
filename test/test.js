@@ -2,7 +2,7 @@ const { _electron: electron } = require('playwright')
 const { test, expect } = require('@playwright/test')
 const electronPath = require('electron')
 const { join } = require('path')
-const { launch, mock } = require('playwright-fake-dialog')
+const { mock } = require('playwright-fake-dialog')
 
 // From https://github.com/spaceagetv/electron-playwright-example/blob/master/e2e-tests/electron-playwright-helpers.ts
 function clickMenuItemById(electronApp, id) {
@@ -20,11 +20,10 @@ function clickMenuItemById(electronApp, id) {
 let electronApp;
 
 test.beforeAll(async () => {
-  process.env.CI = '1'
   const args = [join(__dirname, '..')]
   args.unshift(`--log-file=${join(__dirname, '../electron.log')}`)
   args.unshift('--enable-logging=file')
-  electronApp = await launch(electron, {
+  electronApp = await electron.launch({
     args: args,
     executablePath: electronPath,
   })
@@ -53,7 +52,7 @@ test('native menu open file', async () => {
   // page.on('filechooser', async (fileChooser) => {
   //   await fileChooser.setFiles(join(__dirname, 'data.txt'))
   // })
-  const mocked = await mock(page, [
+  await mock(electronApp, [
     {
       method: 'showOpenDialog',
       value: {
@@ -61,7 +60,6 @@ test('native menu open file', async () => {
       }
     }
   ])
-  // console.log('mocked:', mocked)
   await clickMenuItemById(electronApp, 'file-open')
   const textarea = await page.$('#content')
   expect(textarea).toBeTruthy()

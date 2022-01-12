@@ -1411,10 +1411,10 @@ playwright-core@=1.17.1:
     yauzl "^2.10.0"
     yazl "^2.5.1"
 
-playwright-fake-dialog@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/playwright-fake-dialog/-/playwright-fake-dialog-0.1.0.tgz#d7eb2f35844e514a43c26ad2b29e176c64ec39cd"
-  integrity sha512-lUTk9Y40Vk2Ryg6FrALL1/xNJBZ7Xv9yqCEg52Vh7bS6Oaoyi+DKovGw3wSJIEgI2Pm0L9PycOxGtzecyW5gzw==
+playwright-fake-dialog@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/playwright-fake-dialog/-/playwright-fake-dialog-0.2.0.tgz#2748aad563ef66113f15c71011df5a6fdc1c52ff"
+  integrity sha512-iX/euPBpwc+Q9pGzDaxeHVA9ud+MDJmzHN9TZAWMKXoamRNY/DRagjxBWkdAAdqfJFZ7HiYYTsPIDlgleQxbmw==
 
 playwright@^1.17.1:
   version "1.17.1"

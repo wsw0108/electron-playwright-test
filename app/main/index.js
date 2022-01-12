@@ -33,15 +33,13 @@ function initMenu() {
 }
 
 function createWindow() {
-  const testing = process.env.CI === '1'
-
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      contextIsolation: !testing,
-      nodeIntegration: testing,
+      contextIsolation: true,
+      nodeIntegration: false,
       additionalArguments: [`--app-dir=${path.join(__dirname, '../..')}`],
       preload: path.join(__dirname, '../renderer/preload.js')
     }

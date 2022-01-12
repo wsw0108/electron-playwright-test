@@ -18,6 +18,6 @@
     "@playwright/test": "^1.17.1",
     "electron": "^16.0.6",
     "playwright": "^1.17.1",
-    "playwright-fake-dialog": "^0.1.0"
+    "playwright-fake-dialog": "^0.2.0"
   }
 }
