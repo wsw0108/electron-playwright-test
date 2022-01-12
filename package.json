@@ -15,7 +15,7 @@
   "author": "wsw0108",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.17.1",
+    "@playwright/test": "^1.17.2",
     "electron": "^16.0.6",
     "playwright": "^1.17.1",
     "playwright-fake-dialog": "^0.2.0"
